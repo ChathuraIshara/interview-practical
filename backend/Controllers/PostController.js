@@ -28,8 +28,8 @@ const addPost = async (req, res, next) => {
 };
 const deletePost = async (req, res, next) => {
   try {
-    const postId = req.params.id;
-    const deletedPost = await Post.findByIdAndRemove(postId);
+    const postId = req.params.postId;
+    const deletedPost = await Post.findOneAndDelete(postId);
 
     if (deletedPost) {
       res.json({ message: "Post deleted successfully", deletedPost });
@@ -41,17 +41,23 @@ const deletePost = async (req, res, next) => {
   }
 };
 const updatePost = async (req, res, next) => {
+
+  console.log(req.body);
   try {
-    const postId = req.params.id; 
+    const postId = req.params.postId; 
     const updatedData = {
-      Title: req.body.Title, 
-      Description: req.body.Description, 
-      Color: req.body.Color, 
+      Title: req.body.data.Title, 
+      Description: req.body.data.Description, 
+      Color: req.body.data.Color, 
     };
+
+    console.log("updated dat",updatedData)
 
     const updatedPost = await Post.findByIdAndUpdate(postId, updatedData, {
       new: true,
     });
+
+    console.log(updatedPost)
 
     if (updatedPost) {
       res.json({ message: "Post updated successfully", updatedPost });

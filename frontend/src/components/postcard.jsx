@@ -4,14 +4,26 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import PostPopup from './PostPopup';
+import EditPostModal from './EditPostmodal';
+import DeleteConfirmPopup from './DeleteConfirmPopup';
 
-const Postcard = ({ onEdit, onDelete,deleteConfirm,setDeleteCofirm,data }) => {
+
+const Postcard = ({ onEdit, onDelete,data,
+  fetchPosts }) => {
   const [Comment, setComment] = useState([])
-  const [open,setOpen]=useState(false);
+  const [open,setOpen]=useState(false);  //state for open the post popup
+  const [editOpen,setEditOpen]=useState(false); //state for open the edit popup
+
+  const [deleteConfirm,setDeleteCofirm]=useState(false);  //state for confirming the delet popup
+
 
 
   const handleOpen = () => {
     setOpen(true);
+  }
+
+  const handleEdit = () => {
+    setEditOpen(true);
   }
 
   const handleDelete=()=>
@@ -53,7 +65,7 @@ const Postcard = ({ onEdit, onDelete,deleteConfirm,setDeleteCofirm,data }) => {
            {Comment.length} comments
           </Typography>
           <Box>
-            <Button size="small" color="primary" onClick={onEdit} sx={{ marginRight: 1 }}>
+            <Button size="small" color="primary" onClick={handleEdit} sx={{ marginRight: 1 }}>
               Edit
             </Button>
             <Button size="small" color="secondary" onClick={handleOpen}>
@@ -64,6 +76,8 @@ const Postcard = ({ onEdit, onDelete,deleteConfirm,setDeleteCofirm,data }) => {
       </CardContent>
       <DeleteIcon sx={{color:'red',position:"absolute",top:"10px",right:"10px",cursor:"pointer"}} onClick={handleDelete}/>
       <PostPopup data={data}  open={open} setOpen={setOpen} comments={Comment} postId={data._id} titleColor={data.Color} fetchCommnet={fetchCommnet}></PostPopup>
+      <EditPostModal  fetchPosts={fetchPosts} data={data} editOpen={editOpen} setEditOpen={setEditOpen}></EditPostModal>
+      <DeleteConfirmPopup fetchPosts={fetchPosts} postid={data._id} deleteConfirm={deleteConfirm} setDeleteCofirm={setDeleteCofirm}></DeleteConfirmPopup>
     </Card>
     
   );

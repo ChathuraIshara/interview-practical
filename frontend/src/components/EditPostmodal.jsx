@@ -1,21 +1,52 @@
 import React, { useState } from 'react';
 import { Dialog, DialogTitle, DialogContent, TextField, Button, IconButton, Box } from '@mui/material';
+import axios from 'axios';
 
-export default function EditPostmodal({ openCreatePost, setCreateOpenPost }) {
+
+export default function EditPostmodal({ editOpen, setEditOpen,data,fetchPosts }) {
   const [titleColor, setTitleColor] = useState('blue'); 
+
+  const [Title, setTitle] = useState(data.Title)
+  const [Description, setDescription] = useState(data.Description)
+  
+
+
   const handleClose = () => {
-    setCreateOpenPost(false); 
+    setEditOpen(false); 
   };
 
   const handleColorChange = (color) => {
     setTitleColor(color);
   };
 
+
+  const handleUpdate = async () => {
+    const postPayload = {
+      Title: Title,
+      Description: Description,
+      Color: titleColor,
+    };
+
+try {
+  
+  await axios.put(`http://localhost:3001/api/posts/${data._id}`, {"data":postPayload});
+  setEditOpen(false);
+  fetchPosts();
+} catch (error) {
+  console.log("errro",error)
+}
+      // Update existing post
+
+
+  }
+
+  
+
   return (
     <div>
-      <Dialog open={openCreatePost} onClose={handleClose} maxWidth="sm" fullWidth>
+      <Dialog open={editOpen} onClose={handleClose} maxWidth="sm" fullWidth>
         <DialogTitle>
-          Create Post
+          Edit Post
           <IconButton
             aria-label="close"
             onClick={handleClose}
@@ -33,12 +64,21 @@ export default function EditPostmodal({ openCreatePost, setCreateOpenPost }) {
             <TextField
               label="Title"
               variant="outlined"
+              value={Title}
+              onChange={(e)=>{
+                setTitle(e.target.value)
+              }}
             />
             <TextField
               label="Description"
               variant="outlined"
               multiline
               rows={4}
+              value={Description}
+              onChange={(e)=>{
+                setDescription(e.target.value)
+              }}
+
             />
             <Box>
               <p>Title Color</p>
@@ -57,8 +97,8 @@ export default function EditPostmodal({ openCreatePost, setCreateOpenPost }) {
                 />
               </Box>
             </Box>
-            <Button variant="contained" color="primary">
-              Publish
+            <Button variant="contained" color="primary" onClick={handleUpdate}>
+              Edit
             </Button>
             <Button 
               variant="outlined" 

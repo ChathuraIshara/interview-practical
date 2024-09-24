@@ -75,7 +75,7 @@ const PostPopup = ({open,setOpen,comments,postId,fetchCommnet,titleColor,data}) 
               </Typography>
               {/* Post Content */}
               <Typography variant="body2" sx={{ marginY: '12px' }}>
-               this is about my new project
+               {data.Description}
               </Typography>
               {/*  Count */}
               <Box display="flex" justifyContent="flex-end">
