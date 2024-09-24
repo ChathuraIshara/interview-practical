@@ -1,15 +1,44 @@
 import React, { useState } from 'react';
 import { Dialog, DialogTitle, DialogContent, TextField, Button, IconButton, Box } from '@mui/material';
+import axios from 'axios';
 
-export default function CreatePostPopup({ openCreatePost, setCreateOpenPost }) {
-  const [titleColor, setTitleColor] = useState('blue'); 
+export default function CreatePostPopup({ openCreatePost, setCreateOpenPost ,fetchPosts}) {
+
+  const [Title, setTitle] = useState("")
+  const [Description, setDescription] = useState("")
+  const [Color, setColor] = useState("Black")
   const handleClose = () => {
     setCreateOpenPost(false); 
   };
 
   const handleColorChange = (color) => {
-    setTitleColor(color);
+    setColor(color);
+
   };
+
+  const handlePublish = async () => {
+    console.log("handle")
+    try {
+      const newPost = {
+        Title: Title,
+        Description: Description,
+        Color: Color,
+      };
+      console.log(newPost)
+     
+      await axios.post('http://localhost:3001/api/create', {"newPost":newPost});
+     
+      setTitle("");
+      setDescription("");
+      setColor("Black");
+      fetchPosts();
+     
+      handleClose();
+    } catch (err) {
+      setError(err.message); 
+    }
+  };
+
 
   return (
     <div>
@@ -33,12 +62,18 @@ export default function CreatePostPopup({ openCreatePost, setCreateOpenPost }) {
             <TextField
               label="Title"
               variant="outlined"
+              onChange={(e)=>{
+                setTitle(e.target.value)
+              }}
             />
             <TextField
               label="Description"
               variant="outlined"
               multiline
               rows={4}
+              onChange={(e)=>{
+                setDescription(e.target.value)
+              }}
             />
             <Box>
               <p>Title Color</p>
@@ -57,7 +92,7 @@ export default function CreatePostPopup({ openCreatePost, setCreateOpenPost }) {
                 />
               </Box>
             </Box>
-            <Button variant="contained" color="primary">
+            <Button variant="contained" color="primary" onClick={handlePublish}>
               Publish
             </Button>
             <Button 
