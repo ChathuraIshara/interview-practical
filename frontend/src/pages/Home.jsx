@@ -4,19 +4,17 @@ import { AppBar, Toolbar, Typography, Box } from "@mui/material";
 import Postcard from "../components/postcard";
 import PostPopup from "../components/PostPopup";
 import CreatePostPopup from "../components/CreatePost";
+import DeleteConfirmPopup from "../components/DeleteConfirmPopup";
 
 function Home() {
 
-    const [open,setOpen]=useState(false);
-    const [openCreatePost,setCreateOpenPost]=useState(false);
+    const [open,setOpen]=useState(false);  //state for open post details popup
+    const [openCreatePost,setCreateOpenPost]=useState(false);  //state for open create post popup
+    const [deleteConfirm,setDeleteCofirm]=useState(false);  //state for confirming the delet popup
 
     const handleCreatePost = () => {
         setCreateOpenPost(true);
       };
-
-
-
-
   return (
     <div>
       <AppBar position="static" color="white" sx={{ margin: "16px" }}>
@@ -35,14 +33,13 @@ function Home() {
       </Button>
       <div>
       <Box display="flex" flexDirection="column" alignItems="center" my={3} gap={2}>
-        <Postcard open={open} setOpen={setOpen}/>
+        <Postcard deleteConfirm={deleteConfirm} setDeleteCofirm={setDeleteCofirm} open={open} setOpen={setOpen}/>
         <Postcard   open={open} setOpen={setOpen}/>
       </Box>
       <PostPopup  open={open} setOpen={setOpen}></PostPopup>
       <CreatePostPopup openCreatePost={openCreatePost} setCreateOpenPost={setCreateOpenPost}></CreatePostPopup>
-
-      </div>
-      
+      <DeleteConfirmPopup deleteConfirm={deleteConfirm} setDeleteCofirm={setDeleteCofirm}></DeleteConfirmPopup>
+      </div>  
     </div>
   );
 }
